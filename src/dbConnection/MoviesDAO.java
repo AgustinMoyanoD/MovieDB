@@ -13,12 +13,20 @@ public class MoviesDAO{
 	private boolean createTable(){
 		try {
 			
-			String query = "CREATE TABLE IF NOT EXIST MOVIES ("
+			String query = "CREATE TABLE IF NOT EXISTS MOVIES ("
 					+ "ID INTEGER NOT NULL,"
 					+ "NAME TEXT,"
+					+ "NAME_ESP TEXT,"
 					+ "YEAR INTEGER,"
 					+ "DURATION INTEGER,"
 					+ "RATING REAL,"
+					+ "WATCH_P	BLOB,"
+					+ "WATCH_A	BLOB,"
+					+ "DIRECTION	REAL,"
+					+ "SCRIPT	REAL,"
+					+ "PERFORMANCE	REAL,"
+					+ "SFX REAL,"
+					+ "SOUND	REAL,"
 					+ "PRIMARY KEY(ID AUTOINCREMENT)"
 					+ ");";
 			Statement pstmt = con.createStatement();
@@ -35,13 +43,24 @@ public class MoviesDAO{
 	public boolean guardar(Movie movie) //Stores a film in the db.
 	{
 		try {
-		    String query = "INSERT OR IGNORE INTO COIN (NAME, YEAR, DURATION, RATING) VALUES (?, ?, ?, ?)";
+		    String query = "INSERT OR IGNORE INTO MOVIES (NAME,NAME_ESP, YEAR, DURATION,WATCH_P,WATCH_A,DIRECTION,SCRIPT,PERFORMANCE,SFX,SOUND, RATING) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		    PreparedStatement pstmt = con.prepareStatement(query);
 		    
 		    pstmt.setString(1,movie.getName());
-		    pstmt.setInt(2,movie.getYear());
-		    pstmt.setInt(3,movie.getDuration());  
-		    pstmt.setDouble(4,movie.getRating());
+		    pstmt.setString(2,movie.getNameESP());
+		    pstmt.setInt(3,movie.getYear());
+		    pstmt.setInt(4,movie.getDuration());  
+		    pstmt.setBoolean(5,movie.getRating().isWatchP());  
+		    pstmt.setBoolean(6,movie.getRating().isWatchA());  
+		    pstmt.setDouble(7,movie.getRating().getDirection());  
+		    pstmt.setDouble(8,movie.getRating().getScript());  
+		    pstmt.setDouble(9,movie.getRating().getPerformance());  
+		    pstmt.setDouble(10,movie.getRating().getSfx());  
+		    pstmt.setDouble(11,movie.getRating().getSound());
+		    pstmt.setDouble(12,movie.getRating().getFinalRating());
+		    
+		    
+		    
 		    pstmt.executeUpdate();
 		    pstmt.close();
 		  return true;
@@ -55,7 +74,6 @@ public class MoviesDAO{
 			    break;
 			}
 		}		
-		//System.out.println("¡Se agregó con éxito la criptomoneda a la base de datos!");
 		return false;
 	
 	}
