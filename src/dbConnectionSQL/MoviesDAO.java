@@ -64,11 +64,19 @@ public class MoviesDAO{
 		    
 		    pstmt.executeUpdate();
 		    pstmt.close();
+		    List<List<Object>> movies = this.devolverTabla();
+			try {
+	            GoogleSheetsService.insertDataToSheet(movies);
+	            System.out.println("Data succesfully exported!");
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            return false;
+	        }
 		  return true;
 		} catch (SQLException e) {
 			switch (e.getErrorCode()) {
 			case 19:
-			    	System.out.println("La sigla de criptomoneda ya existe (debe ser única)");
+			    	System.out.println("ID must be unique");
 			    	break;
 			default:
 			    System.out.println(e.getMessage());
@@ -96,8 +104,8 @@ public class MoviesDAO{
 		                row.add(rs.getString("NAME_ESP"));
 		                row.add(rs.getInt("YEAR"));
 		                row.add(rs.getInt("DURATION"));
-		                row.add(rs.getBoolean("WATCH_P"));
-		                row.add(rs.getBoolean("WATCH_A"));
+		                row.add(rs.getString("WATCH_P"));
+		                row.add(rs.getString("WATCH_A"));
 		                row.add(rs.getDouble("DIRECTION"));
 		                row.add(rs.getDouble("SCRIPT"));
 		                row.add(rs.getDouble("PERFORMANCE"));
@@ -106,13 +114,8 @@ public class MoviesDAO{
 		                row.add(rs.getDouble("RATING"));
 
 		                movies.add(row);
-		            }
-				 try {
-			            GoogleSheetsService.insertDataToSheet(movies);
-			            System.out.println("Datos exportados con éxito a Google Sheets.");
-			        } catch (Exception e) {
-			            e.printStackTrace();
-			        }
+		         }
+				 
 				sent.close();
 				return movies;
 			} catch (SQLException e) {
@@ -122,5 +125,17 @@ public class MoviesDAO{
 			
 			
 		}
+	public boolean exportGoogleSheet() {
+		List<List<Object>> movies = this.devolverTabla();
+		try {
+            GoogleSheetsService.insertDataToSheet(movies);
+            System.out.println("Data succesfully exported!");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+		
+		return true;
+	}
 
 }
