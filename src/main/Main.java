@@ -1,6 +1,6 @@
 package main;
 
-import dbConnection.MoviesDAO;
+import dbConnectionSQL.MoviesDAO;
 import movieModelation.Movie;
 
 public class Main {

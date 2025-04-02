@@ -1,8 +1,9 @@
-package dbConnection;
+package dbConnectionSQL;
 import java.sql.*;
+import java.util.*;
 
 import movieModelation.Movie;
-
+import movieModelation;
 public class MoviesDAO{
 	private Connection con;
 	public MoviesDAO() {
@@ -77,5 +78,42 @@ public class MoviesDAO{
 		return false;
 	
 	}
+	public List<Movie> devolverTabla() { //devuelve una lista con todas las monedas guardadas en la base de datos.
+			
+			Movie auxMovie;
+			List<List<Object>> movies= new LinkedList<Movie>();
+			
+			try {
+				Statement sent = con.createStatement();	
+				ResultSet resul = sent.executeQuery("SELECT * FROM MOVIES");
+				 
+				// Si entra al while obtuvo al menos una fila
+				 while (rs.next()) {
+		                List<Object> row = new ArrayList<>();
+		                row.add(rs.getInt("ID"));
+		                row.add(rs.getString("NAME"));
+		                row.add(rs.getString("NAME_ESP"));
+		                row.add(rs.getInt("YEAR"));
+		                row.add(rs.getInt("DURATION"));
+		                row.add(rs.getBoolean("WATCH_P"));
+		                row.add(rs.getBoolean("WATCH_A"));
+		                row.add(rs.getDouble("DIRECTION"));
+		                row.add(rs.getDouble("SCRIPT"));
+		                row.add(rs.getDouble("PERFORMANCE"));
+		                row.add(rs.getDouble("SFX"));
+		                row.add(rs.getDouble("SOUND"));
+		                row.add(rs.getDouble("RATING"));
+
+		                movies.add(row);
+		            }
+				sent.close();
+				return movies;
+			} catch (SQLException e) {
+				System.out.println(e.getMessage());
+				return movies;
+			}
+			
+			
+		}
 
 }
