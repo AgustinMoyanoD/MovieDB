@@ -1,4 +1,4 @@
-package movieModelation;
+package src.movieModelation;
 
 public class Rating {
 	//VARIABLES

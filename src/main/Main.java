@@ -1,13 +1,18 @@
-package main;
+package src.main;
 
-import dbConnectionSQL.MoviesDAO;
-import movieModelation.Movie;
 
+import com.google.*;
+
+import src.dbConnectionSQL.MoviesDAO;
+import src.googleAPIS.GoogleSheetsService;
 public class Main {
 
 	public static void main(String[] args) {
+
 		MoviesDAO moviesdb = new MoviesDAO();
-		Movie movie = new Movie("Test", "TestEsp",99,2002,true,false,50,50,50,50,50);
-		moviesdb.guardar(movie);
+		String spreadsheetId = "1tEHSonky7Su-qUmHhK-G6_3AbYQ1Lml1mjmblAyPI3Y";
+		String title = GoogleSheetsService.getSpreadsheetTitle(spreadsheetId);
+		moviesdb.devolverTabla();
+
 	}
 }

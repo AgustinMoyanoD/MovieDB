@@ -1,9 +1,9 @@
-package dbConnectionSQL;
+package src.dbConnectionSQL;
 import java.sql.*;
 import java.util.*;
 
-import movieModelation.Movie;
-import movieModelation;
+import src.googleAPIS.GoogleSheetsService;
+import src.movieModelation.Movie;
 public class MoviesDAO{
 	private Connection con;
 	public MoviesDAO() {
@@ -78,15 +78,16 @@ public class MoviesDAO{
 		return false;
 	
 	}
-	public List<Movie> devolverTabla() { //devuelve una lista con todas las monedas guardadas en la base de datos.
+	public List<List<Object>> devolverTabla() { //devuelve una lista con todas las monedas guardadas en la base de datos.
 			
 			Movie auxMovie;
-			List<List<Object>> movies= new LinkedList<Movie>();
+			List<List<Object>> movies= new LinkedList<List<Object>>();
 			
 			try {
 				Statement sent = con.createStatement();	
-				ResultSet resul = sent.executeQuery("SELECT * FROM MOVIES");
+				ResultSet rs = sent.executeQuery("SELECT * FROM MOVIES");
 				 
+		
 				// Si entra al while obtuvo al menos una fila
 				 while (rs.next()) {
 		                List<Object> row = new ArrayList<>();
@@ -106,6 +107,12 @@ public class MoviesDAO{
 
 		                movies.add(row);
 		            }
+				 try {
+			            GoogleSheetsService.insertDataToSheet(movies);
+			            System.out.println("Datos exportados con éxito a Google Sheets.");
+			        } catch (Exception e) {
+			            e.printStackTrace();
+			        }
 				sent.close();
 				return movies;
 			} catch (SQLException e) {

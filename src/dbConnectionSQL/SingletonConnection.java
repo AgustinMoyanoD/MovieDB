@@ -1,4 +1,4 @@
-package dbConnectionSQL;
+package src.dbConnectionSQL;
 import java.sql.*;
 public class SingletonConnection {
 	private static Connection conn = null;
